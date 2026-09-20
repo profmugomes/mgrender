@@ -14,10 +14,10 @@ import (
 )
 
 type renderer struct {
-	mu       sync.RWMutex
-	layout   string
-	pageFile []string
-	data     map[string]any
+	mu            sync.RWMutex
+	layoutDefault string
+	pageFile      []string
+	data          map[string]any
 }
 
 type Context struct {
@@ -26,10 +26,10 @@ type Context struct {
 	data     map[string]any
 }
 
-func New() *renderer {
+func New(layout string) *renderer {
 	return &renderer{
-		layout: "layout/layout.html",
-		data:   make(map[string]any),
+		layoutDefault: layout,
+		data:          make(map[string]any),
 	}
 }
 
@@ -39,7 +39,7 @@ func (p *renderer) AddFile(value string) {
 
 	p.pageFile = append(
 		p.pageFile,
-		filepath.Join("layout", value),
+		value,
 	)
 }
 
@@ -59,7 +59,7 @@ func (p *renderer) Handle(
 		ctx := &Context{
 			renderer: p,
 			pageFile: append(
-				[]string{p.layout},
+				[]string{p.layoutDefault},
 				p.pageFile...,
 			),
 			data: maps.Clone(p.data),
@@ -76,7 +76,7 @@ func (p *renderer) Handle(
 func (p *Context) AddFile(value string) {
 	p.pageFile = append(
 		p.pageFile,
-		filepath.Join("layout", value),
+		value,
 	)
 }
 
@@ -104,7 +104,7 @@ func (p *Context) Show(w http.ResponseWriter, status int) {
 
 	err = tpl.ExecuteTemplate(
 		w,
-		"layout.html",
+		filepath.Base(p.renderer.layoutDefault),
 		p.data,
 	)
 

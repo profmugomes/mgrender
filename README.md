@@ -1,27 +1,26 @@
 # MGRender
 
-[![License](https://img.shields.io/badge/license-PolyForm%20Perimeter%201.0.1-5351FB)](LICENSE.md)
-
 Biblioteca para renderização de templates HTML em aplicações Go.
 
 O MGRender permite configurar arquivos e dados globais no `main` e criar um `Context` independente para cada requisição HTTP.
 
 ## Características
 
-- Renderização de templates HTML
-- Dados globais compartilhados entre páginas
-- Arquivos globais compartilhados entre páginas
-- Contexto independente por requisição
-- Compatível com `net/http`
-- Compatível com roteadores como Chi
-- Seguro para uso concorrente
-- Sem dependências externas
+* Renderização de templates HTML
+* Layout padrão definido na criação do renderer
+* Dados globais compartilhados entre páginas
+* Arquivos globais compartilhados entre páginas
+* Contexto independente por requisição
+* Compatível com `net/http`
+* Compatível com roteadores como Chi
+* Seguro para uso concorrente
+* Sem dependências externas
 
 ## Instalação
 
 ```bash
 go get github.com/profmugomes/mgrender
-````
+```
 
 ## Estrutura do projeto
 
@@ -29,6 +28,7 @@ Um projeto pode ser organizado desta forma:
 
 ```text
 mgcadastro/
+
 ├── main.go
 ├── cadastro/
 │   ├── lista.go
@@ -46,6 +46,8 @@ mgcadastro/
 
 O `renderer` deve ser criado uma única vez e configurado no `main`.
 
+O layout principal é informado diretamente através do `New()`:
+
 ```go
 package main
 
@@ -53,17 +55,18 @@ import (
 	"fmt"
 	"net/http"
 
-	"github.com/profmugomes/mgrender"
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
+	"github.com/profmugomes/mgrender"
 )
 
 func main() {
-	tpl := mgrender.New()
+	tpl := mgrender.New("layout/layout.html")
 
-	tpl.AddFile("menu.html")
+	tpl.AddFile("layout/menu.html")
 
 	tpl.SetData("SiteName", "Sistema de Cadastro")
+
 	tpl.SetData("MenuData", []string{
 		"Início",
 		"Clientes",
@@ -90,13 +93,18 @@ func main() {
 Também é possível criar o handler diretamente no `main`:
 
 ```go
-func Lista(ctx *mgrender.Context,w http.ResponseWriter, r *http.Request) {
-	ctx.AddFile("lista.html")
+func Lista(
+	ctx *mgrender.Context,
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	ctx.AddFile("layout/lista.html")
 
 	ctx.SetData("Title", "Lista de Cadastro")
+
 	ctx.SetData("Data", []map[string]string{
 		{
-			"Nome": "João",
+			"Nome":  "João",
 			"Idade": "29",
 		},
 	})
@@ -117,6 +125,7 @@ Exemplo:
 
 ```text
 mgcadastro/
+
 ├── main.go
 ├── cadastro/
 │   ├── lista.go
@@ -139,8 +148,12 @@ import (
 	"github.com/profmugomes/mgrender"
 )
 
-func Lista(ctx *mgrender.Context, w http.ResponseWriter, r *http.Request) {
-	ctx.AddFile("lista.html")
+func Lista(
+	ctx *mgrender.Context,
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	ctx.AddFile("layout/lista.html")
 
 	ctx.SetData("Title", "Lista de Cadastro")
 
@@ -168,8 +181,12 @@ import (
 	"github.com/profmugomes/mgrender"
 )
 
-func Editar(ctx *mgrender.Context, w http.ResponseWriter, r *http.Request) {
-	ctx.AddFile("editar.html")
+func Editar(
+	ctx *mgrender.Context,
+	w http.ResponseWriter,
+	r *http.Request,
+) {
+	ctx.AddFile("layout/editar.html")
 
 	ctx.SetData("Title", "Editar Cadastro")
 }
@@ -186,18 +203,17 @@ import (
 	"fmt"
 	"net/http"
 
+	"github.com/go-chi/chi/v5"
+	"github.com/go-chi/chi/v5/middleware"
 	"github.com/profmugomes/mgcadastro/cadastro"
 	"github.com/profmugomes/mgcadastro/menu"
 	"github.com/profmugomes/mgrender"
-
-	"github.com/go-chi/chi/v5"
-	"github.com/go-chi/chi/v5/middleware"
 )
 
 func main() {
-	tpl := mgrender.New()
+	tpl := mgrender.New("layout/layout.html")
 
-	tpl.AddFile("menu.html")
+	tpl.AddFile("layout/menu.html")
 
 	tpl.SetData("SiteName", "MG Cadastro")
 	tpl.SetData("MenuData", menu.Menu())
@@ -289,16 +305,18 @@ Para percorrer uma lista:
 
 ## Layout
 
-O arquivo padrão utilizado pelo MGRender é:
+O layout principal é definido na criação do renderer:
 
-```text
-layout/layout.html
+```go
+tpl := mgrender.New("layout/layout.html")
 ```
+
+O caminho é definido pelo desenvolvedor e não é imposto pela biblioteca.
 
 Os arquivos adicionados através de:
 
 ```go
-tpl.AddFile("menu.html")
+tpl.AddFile("layout/menu.html")
 ```
 
 ficam disponíveis para o layout.
@@ -306,7 +324,7 @@ ficam disponíveis para o layout.
 Os arquivos específicos de uma página podem ser adicionados no handler:
 
 ```go
-ctx.AddFile("lista.html")
+ctx.AddFile("layout/lista.html")
 ```
 
 Assim, uma requisição para `/` pode utilizar:
@@ -325,12 +343,14 @@ layout/menu.html
 layout/editar.html
 ```
 
+A biblioteca não exige que os templates estejam em um diretório específico. Os caminhos são definidos pela aplicação.
+
 ## Contexto por requisição
 
 O `renderer` é criado uma única vez:
 
 ```go
-tpl := mgrender.New()
+tpl := mgrender.New("layout/layout.html")
 ```
 
 Porém, cada chamada:
@@ -341,11 +361,16 @@ tpl.Handle(cadastro.Lista)
 
 cria um novo `Context` para a requisição.
 
+Os dados globais são clonados para o `Context`, permitindo que uma página altere ou adicione dados sem modificar os dados globais.
+
+Os arquivos globais também são copiados para o contexto da requisição, permitindo adicionar os arquivos específicos da página sem alterar o estado do `renderer`.
+
 Isso permite que requisições simultâneas tenham seus próprios arquivos e dados.
 
 ```text
 Renderer
-│
+
+├── layout padrão
 ├── arquivos globais
 ├── dados globais
 │
@@ -367,23 +392,22 @@ Renderer
 
 Dessa forma, uma página não altera o contexto de outra requisição.
 
----
-
-## 🧩 Compatibilidade
+## Compatibilidade
 
 * Go 1.26.5+
+* `net/http`
+* Roteadores compatíveis com `net/http`
+* Chi e outros roteadores que utilizem `http.Handler` ou `http.HandlerFunc`
 
----
+O MGRender não possui dependências externas.
 
-## 👤 Autor
+## Autor
 
 **Murilo Gomes**
 
-🔗 [https://www.profmugomes.com.br](https://www.profmugomes.com.br)
+https://www.profmugomes.com.br
 
-📺 [https://youtube.com/@profmugomes](https://youtube.com/@profmugomes)
-
----
+https://youtube.com/@profmugomes
 
 ## License
 
@@ -407,6 +431,6 @@ You may not:
 
 * ✖ Provide a product that competes with the software.
 
-See the full license terms at LICENSE.md.
+See the full license terms at [LICENSE.md](LICENSE.md).
 
 This summary is provided for convenience only and does not replace or modify the full license terms.
