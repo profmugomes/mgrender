@@ -1,5 +1,7 @@
 # MGRender
 
+[![License](https://img.shields.io/badge/license-PolyForm%20Perimeter%201.0.1-5351FB)](LICENSE.md)
+
 Biblioteca para renderização de templates HTML em aplicações Go.
 
 O MGRender permite configurar arquivos e dados globais no `main` e criar um `Context` independente para cada requisição HTTP.
