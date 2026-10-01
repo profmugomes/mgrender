@@ -1,6 +1,10 @@
 # MGRender
 
 [![License](https://img.shields.io/badge/license-PolyForm%20Perimeter%201.0.1-5351FB)](LICENSE.md)
+<!-- Badge opcional para deixar claro visualmente -->
+![Status](https://img.shields.io/badge/status-arquivado--archived-red.svg)
+
+> **Aviso importante:** Esta software foi **oficialmente arquivado** e não receberá mais atualizações, correções de bugs ou suporte para novas versões.
 
 Biblioteca para renderização de templates HTML em aplicações Go.
 
