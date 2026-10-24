@@ -1,9 +1,5 @@
 # MGRender
 
-![Status](https://img.shields.io/badge/status-arquivado--archived-red.svg)
-
-> **Aviso importante:** Esta software foi **oficialmente arquivado** e não receberá mais atualizações, correções de bugs ou suporte para novas versões.
-
 Biblioteca para renderização de templates HTML em aplicações Go.
 
 O MGRender permite configurar arquivos e dados globais no `main` e criar um `Context` independente para cada requisição HTTP.
