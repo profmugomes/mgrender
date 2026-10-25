@@ -1,5 +1,7 @@
 # MGRender
 
+[![License](https://img.shields.io/badge/license-MIT-5351FB)](LICENSE)
+
 Biblioteca para renderização de templates HTML em aplicações Go.
 
 O MGRender permite configurar arquivos e dados globais no `main` e criar um `Context` independente para cada requisição HTTP.
@@ -394,43 +396,27 @@ Dessa forma, uma página não altera o contexto de outra requisição.
 
 ## Compatibilidade
 
-* Go 1.26.5+
+* Go 1.27.2+
 * `net/http`
 * Roteadores compatíveis com `net/http`
 * Chi e outros roteadores que utilizem `http.Handler` ou `http.HandlerFunc`
 
 O MGRender não possui dependências externas.
 
-## Autor
+## 👤 Autor
 
 **Murilo Gomes**
 
-https://www.profmugomes.com.br
+🔗 [https://www.profmugomes.com.br](https://www.profmugomes.com.br)
 
-https://youtube.com/@profmugomes
+📺 [https://youtube.com/@profmugomes](https://youtube.com/@profmugomes)
+
+---
 
 ## License
 
-Copyright (c) 2026 Murilo Gomes <profmugomes.com.br>. All Rights Reserved.
+Copyright (c) 2026 Murilo Gomes <profmugomes.com.br>
 
-This project is licensed under the PolyForm Perimeter License 1.0.1.
+Licensed under the [MIT](https://github.com/profmugomes/mgrender/blob/main/LICENSE) license.
 
-### Summary
-
-This software is available for commercial and noncommercial use, subject to the terms of the PolyForm Perimeter License 1.0.1.
-
-You may:
-
-* ✔ Use the software for commercial and noncommercial purposes.
-* ✔ Inspect and study the source code.
-* ✔ Modify the software.
-* ✔ Create derivative works based on the software.
-* ✔ Redistribute the software and permitted modifications.
-
-You may not:
-
-* ✖ Provide a product that competes with the software.
-
-See the full license terms at [LICENSE.md](LICENSE.md).
-
-This summary is provided for convenience only and does not replace or modify the full license terms.
+All contributions to the MGRender are subject to this license.
