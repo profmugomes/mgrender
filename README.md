@@ -21,7 +21,7 @@ O MGRender permite configurar arquivos e dados globais no `main` e criar um `Con
 ## Instalação
 
 ```bash
-go get github.com/profmugomes/mgrender
+go get github.com/profmugomes/mgrender/v2
 ```
 
 ## Estrutura do projeto
@@ -59,7 +59,7 @@ import (
 
 	"github.com/go-chi/chi/v5"
 	"github.com/go-chi/chi/v5/middleware"
-	"github.com/profmugomes/mgrender"
+	"github.com/profmugomes/mgrender/v2"
 )
 
 func main() {
@@ -147,7 +147,7 @@ package cadastro
 import (
 	"net/http"
 
-	"github.com/profmugomes/mgrender"
+	"github.com/profmugomes/mgrender/v2"
 )
 
 func Lista(
@@ -180,7 +180,7 @@ package cadastro
 import (
 	"net/http"
 
-	"github.com/profmugomes/mgrender"
+	"github.com/profmugomes/mgrender/v2"
 )
 
 func Editar(
@@ -209,7 +209,7 @@ import (
 	"github.com/go-chi/chi/v5/middleware"
 	"github.com/profmugomes/mgcadastro/cadastro"
 	"github.com/profmugomes/mgcadastro/menu"
-	"github.com/profmugomes/mgrender"
+	"github.com/profmugomes/mgrender/v2"
 )
 
 func main() {
