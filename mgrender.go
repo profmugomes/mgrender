@@ -1,7 +1,7 @@
-// Copyright (c) 2026 Murilo Gomes <profmugomes.com.br>. All Rights Reserved.
+// Copyright (C) 2026 Murilo Gomes <profmugomes.com.br>
+// SPDX-License-Identifier: MIT
 
-// Licensed under the PolyForm Perimeter License 1.0.1.
-// See LICENSE.md for details.
+// Site: https://www.profmugomes.com.br
 
 package mgrender
 
